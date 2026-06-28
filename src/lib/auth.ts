@@ -38,11 +38,14 @@ export function options() {
   });
 }
 
-export function licenseStatus(license: { plan: string; status: string; trial_ends_at: string }) {
+export function licenseStatus(license: Record<string, unknown>) {
+  const plan = String(license.plan ?? '');
+  const status = String(license.status ?? '');
+  const trial_ends_at = String(license.trial_ends_at ?? '');
   const now = new Date();
-  const trialEnd = new Date(license.trial_ends_at);
-  const isPro = license.plan === 'pro' && license.status === 'active';
-  const isTrial = license.plan === 'trial' && trialEnd > now;
+  const trialEnd = new Date(trial_ends_at);
+  const isPro = plan === 'pro' && status === 'active';
+  const isTrial = plan === 'trial' && trialEnd > now;
   const daysLeft = Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / 86400000));
   return { isPro, isTrial, daysLeft, active: isPro || isTrial };
 }

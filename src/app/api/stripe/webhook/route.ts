@@ -4,7 +4,7 @@ import { sql } from '@/lib/db';
 
 export const runtime = 'nodejs';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' });
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-06-20' });
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.CheckoutSession;
+    const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.userId;
     if (userId) {
       await sql`
