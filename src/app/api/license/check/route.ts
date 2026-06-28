@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sql } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import { verifyToken, getTokenFromRequest, licenseStatus, options } from '@/lib/auth';
 
 export const runtime = 'nodejs';
@@ -7,6 +7,7 @@ export const runtime = 'nodejs';
 export function OPTIONS() { return options(); }
 
 export async function GET(req: NextRequest) {
+  const sql = getDb();
   try {
     const token = getTokenFromRequest(req);
     if (!token) {

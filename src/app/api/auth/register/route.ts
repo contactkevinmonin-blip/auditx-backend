@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { sql } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import { signToken, options } from '@/lib/auth';
 
 export const runtime = 'nodejs';
@@ -8,6 +8,7 @@ export const runtime = 'nodejs';
 export function OPTIONS() { return options(); }
 
 export async function POST(req: NextRequest) {
+  const sql = getDb();
   try {
     const { email, password } = await req.json();
 
