@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getDb } from '@/lib/db';
 import { signToken, options } from '@/lib/auth';
+import { syncContactToOdoo } from '@/lib/odoo';
 
 export const runtime = 'nodejs';
 
@@ -41,6 +42,8 @@ export async function POST(req: NextRequest) {
     `;
 
     const token = signToken({ userId: user.id, email: user.email });
+
+    syncContactToOdoo(email.toLowerCase(), false);
 
     return NextResponse.json({
       token,

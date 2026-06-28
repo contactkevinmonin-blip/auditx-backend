@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getDb } from '@/lib/db';
+import { syncContactToOdoo } from '@/lib/odoo';
 
 export const runtime = 'nodejs';
 
@@ -32,6 +33,8 @@ export async function POST(req: NextRequest) {
             stripe_subscription_id = ${session.subscription as string}
         WHERE user_id = ${userId}
       `;
+      const rows = await sql`SELECT email FROM auditx_users WHERE id = ${userId}`;
+      if (rows[0]) syncContactToOdoo(rows[0].email as string, true);
     }
   }
 
